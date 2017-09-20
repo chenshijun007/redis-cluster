@@ -20,4 +20,3 @@ ENV LC_ALL     en_US.UTF-8
 
 RUN apt-get update
 RUN apt-get -y install ruby 2.4
-RUN gem install redis
