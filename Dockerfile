@@ -9,16 +9,22 @@ ENV DEBIAN_FRONTEND noninteractive
 # Install system dependencies
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -yqq \
-      net-tools supervisor ruby rubygems locales gettext-base wget && \
+      net-tools supervisor ca-certificates gnupg gnupg2 curl locales gettext-base && \
     apt-get clean -yqq
 
-# # Ensure UTF-8 lang and locale
+# Install rvm、Ruby、RubyGems
+RUN curl -k -sSL https://rvm.io/mpapis.asc | gpg --import - \
+    && curl -k -sSL get.rvm.io | bash -s stable \
+    && /bin/bash -l -c ". /etc/profile.d/rvm.sh && rvm install 2.4.1 && gem install redis"
+
+# Ensure UTF-8 lang and locale
 RUN locale-gen en_US.UTF-8
 ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
 
 
-RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl git supervisor ruby
+RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl wget \
+    && apt-get clean -yqq
 
 ARG redis_version=3.2.9
 
@@ -45,3 +51,4 @@ EXPOSE 7000 7001 7002 7003 7004 7005 7006 7007
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["redis-cluster"]
+
