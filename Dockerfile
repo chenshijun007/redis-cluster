@@ -18,5 +18,6 @@ ENV LANG       en_US.UTF-8
 ENV LC_ALL     en_US.UTF-8
 
 
-RUN apt-get update
-RUN apt-get -y install ruby 2.4
+RUN apt-get update 
+RUN apt-get install -y --no-install-recommends build-essential gcc ruby wget make
+RUN gem install redis
