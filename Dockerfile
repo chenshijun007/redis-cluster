@@ -25,13 +25,7 @@ ENV LC_ALL     en_US.UTF-8
 
 RUN apt-get install -y gcc make g++ build-essential libc6-dev tcl wget \
     && apt-get clean -yqq
-
-ARG redis_version=3.2.9
-
-RUN wget -qO redis.tar.gz http://download.redis.io/releases/redis-${redis_version}.tar.gz \
-    && tar xfz redis.tar.gz -C / \
-    && mv /redis-$redis_version /redis
-
+    
 RUN (cd /redis && make)
 
 RUN mkdir /redis-conf
